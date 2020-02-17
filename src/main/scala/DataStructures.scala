@@ -9,15 +9,20 @@ object DataStructures {
   case class Cons[+A](head: A, tail: List[A]) extends List[A]
 
   object List {
-    def sum(ints: List[Int]): Int = ints match {
-      case Nil => 0
-      case Cons(x, xs) => x + sum(xs)
+    def sum(ints: List[Int]): Int = {
+      foldRight(ints, 0)(_ + _)
     }
 
-    def product(ds: List[Double]): Double = ds match {
-      case Nil => 1.0
-      case Cons(0.0, _) => 0.0
-      case Cons(x, xs) => x * product(xs)
+    def sumFl(ints: List[Int]): Int = {
+      foldLeft(ints, 0)(_ + _)
+    }
+
+    def product(ds: List[Double]): Double = {
+      foldRight(ds, 1.0)(_ * _)
+    }
+
+    def productFl(ds: List[Double]): Double = {
+      foldLeft(ds, 1.0)(_ * _)
     }
 
     def apply[A](as: A*): List[A] = {
@@ -72,14 +77,27 @@ object DataStructures {
         else lst
     }
 
+    @tailrec
+    def dropWhile1[A](lst: List[A])(f: A => Boolean): List[A] = lst match {
+      case Cons(x, xs) if f(x) => dropWhile1(xs)(f)
+      case _ => lst
+    }
+
     def append[A](a1: List[A], a2: List[A]): List[A] = a1 match {
       case Nil => a2
       case Cons(h, t) => Cons(h, append(t, a2))
     }
 
-    def length[A](lst: List[A]): Int = lst match {
-      case Nil => 0
-      case Cons(_, xs) => 1 + length(xs)
+    def appendR[A](l1: List[A], l2: List[A]): List[A] = foldRight(l1, l2)((a, b) => Cons(a, b))
+
+    def appendL[A](l1: List[A], l2: List[A]): List[A] = foldLeft(l1, l2)((a, b) => Cons(b, a))
+
+    def length[A](lst: List[A]): Int = {
+      foldRight(lst, 0)((_, b) => b + 1)
+    }
+
+    def lengthFl[A](lst: List[A]): Int = {
+      foldLeft(lst, 0)((a, _) => a + 1)
     }
 
     def init[A](l: List[A]): List[A] = l match {
@@ -92,6 +110,29 @@ object DataStructures {
 
         loop(length(l), l)
     }
+
+    def foldRight[A, B](lst: List[A], z: B)(f: (A, B) => B): B =
+      lst match {
+        case Nil => z
+        case Cons(x, xs) => f(x, foldRight(xs, z)(f))
+      }
+
+    def foldLeft[A, B](lst: List[A], z: B)(f: (B, A) => B): B = lst match {
+      case Nil => z
+      case Cons(x, xs) => f(foldLeft(xs, z)(f), x)
+    }
+
+    def reverse[A](lst: List[A]): List[A] = {
+      foldRight(lst, Nil: List[A])((a, b) => append(b, Cons(a, Nil)))
+    }
+
+    // foldLeft through foldRight
+    def foldLeftFR[A, B](lst: List[A], z: B)(f: (B, A) => B): B = foldRight(lst, z)((a, b) => f(b, a))
+
+    // foldRight through foldLeft
+    def foldRightFL[A, B](lst: List[A], z: B)(f: (A, B) => B): B = foldLeft(lst, z)((a, b) => f(b, a))
+
+    def flatten[A](lst: List[List[A]]): List[A] = foldRight(lst, Nil:List[A])((a, b) => appendR(a, b))
   }
 
 }

@@ -132,7 +132,47 @@ object DataStructures {
     // foldRight through foldLeft
     def foldRightFL[A, B](lst: List[A], z: B)(f: (A, B) => B): B = foldLeft(lst, z)((a, b) => f(b, a))
 
-    def flatten[A](lst: List[List[A]]): List[A] = foldRight(lst, Nil:List[A])((a, b) => appendR(a, b))
+    def flatten[A](lst: List[List[A]]): List[A] = foldRight(lst, Nil: List[A])((a, b) => appendR(a, b))
+
+    def increaseOne(lst: List[Int]): List[Int] = foldRight(lst, Nil: List[Int])((a, b) => Cons(a + 1, b))
+
+    def doubleToString(lst: List[Double]): List[String] = foldRight(lst, Nil: List[String])((a, b) => Cons(a.toString, b))
+
+    def map[A, B](lst: List[A])(f: A => B): List[B] = {
+      foldRight(lst, Nil: List[B])((a, b) => Cons(f(a), b))
+    }
+
+    def filter[A](lst: List[A])(f: A => Boolean): List[A] = {
+      foldRight(lst, Nil: List[A])((a, b) => if (f(a)) Cons(a, b) else b)
+    }
+
+    def flatMap[A, B](lst: List[A])(f: A => List[B]): List[B] = {
+      foldRight(lst, Nil:List[B])((a, b) => appendR(f(a), b))
+    }
+
+    def filterFM[A](lst: List[A])(f: A => Boolean): List[A] = {
+      flatMap(lst)((a: A) => if (f(a)) Cons(a, Nil) else Nil)
+    }
+
+    def zipInt(l1: List[Int], l2: List[Int]): List[Int] = {
+      def loop(l1: List[Int], l2: List[Int]) : List[Int] = {
+        l1 match {
+          case Nil => Nil
+          case Cons(x, xs) => Cons(x + head(l2), loop(xs, tail(l2)))
+        }
+      }
+      loop(l1, l2)
+    }
+
+    def zipWith[A](l1: List[A], l2: List[A], f: (A, A) => A): List[A] = {
+      def loop(l1: List[A], l2: List[A]) : List[A] = {
+        l1 match {
+          case Nil => Nil
+          case Cons(x, xs) => Cons(f(x, head(l2)), loop(xs, tail(l2)))
+        }
+      }
+      loop(l1, l2)
+    }
   }
 
 }

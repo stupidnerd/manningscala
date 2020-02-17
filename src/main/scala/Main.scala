@@ -4,7 +4,8 @@ import DataStructures.List
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val l1 = List(List(1, 2, 3), List(4, 5, 6), List(7, 8, 9))
-    println(List.flatten(l1))
+    val l1 = List(1, 2, 3)
+    val l2 = List(4, 5, 6)
+    println(List.zipInt(l1, l2))
   }
 }

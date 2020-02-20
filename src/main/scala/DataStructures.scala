@@ -69,6 +69,24 @@ object DataStructures {
       }
     }
 
+    def take[A](lst: List[A], n: Int): List[A] = {
+      if (n < 0) Nil
+      else if (n == 0) lst
+
+      @tailrec
+      def loop(lst: List[A], n: Int, acc: List[A]): List[A] = {
+        if (n == 0) acc
+        else
+          lst match {
+            case Nil => acc
+            case Cons(x, xs) => loop(xs, n - 1, Cons(x, acc))
+          }
+      }
+
+      loop(lst, n, Nil)
+    }
+
+
     @tailrec
     def dropWhile[A](lst: List[A], f: A => Boolean): List[A] = lst match {
       case Nil => Nil
@@ -147,7 +165,7 @@ object DataStructures {
     }
 
     def flatMap[A, B](lst: List[A])(f: A => List[B]): List[B] = {
-      foldRight(lst, Nil:List[B])((a, b) => appendR(f(a), b))
+      foldRight(lst, Nil: List[B])((a, b) => appendR(f(a), b))
     }
 
     def filterFM[A](lst: List[A])(f: A => Boolean): List[A] = {
@@ -155,23 +173,29 @@ object DataStructures {
     }
 
     def zipInt(l1: List[Int], l2: List[Int]): List[Int] = {
-      def loop(l1: List[Int], l2: List[Int]) : List[Int] = {
+      def loop(l1: List[Int], l2: List[Int]): List[Int] = {
         l1 match {
           case Nil => Nil
           case Cons(x, xs) => Cons(x + head(l2), loop(xs, tail(l2)))
         }
       }
+
       loop(l1, l2)
     }
 
     def zipWith[A](l1: List[A], l2: List[A], f: (A, A) => A): List[A] = {
-      def loop(l1: List[A], l2: List[A]) : List[A] = {
+      def loop(l1: List[A], l2: List[A]): List[A] = {
         l1 match {
           case Nil => Nil
           case Cons(x, xs) => Cons(f(x, head(l2)), loop(xs, tail(l2)))
         }
       }
+
       loop(l1, l2)
+    }
+
+    def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
+      throw new NotImplementedError()
     }
   }
 

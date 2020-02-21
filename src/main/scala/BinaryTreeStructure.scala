@@ -1,4 +1,4 @@
-object MyTreeStructure {
+object BinaryTreeStructure {
 
   sealed trait Tree[+A]
 

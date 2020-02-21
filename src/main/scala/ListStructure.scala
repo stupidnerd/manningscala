@@ -1,6 +1,6 @@
 import scala.annotation.tailrec
 
-object MyListStructure {
+object ListStructure {
 
   sealed trait List[+A]
 

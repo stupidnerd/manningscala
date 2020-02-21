@@ -1,11 +1,14 @@
-import MyListStructure.Cons
-import MyListStructure.Nil
-import MyListStructure.List
+import ListStructure.Cons
+import ListStructure.Nil
+import ListStructure.List
+import BinaryTreeStructure.Tree
+import BinaryTreeStructure.Branch
+import BinaryTreeStructure.Leaf
 
 object Main {
   def main(args: Array[String]): Unit = {
-    val myList = List(1, 2, 3, 4)
-    val myList2 = List(4, 5)
-    println(List.hasSubsequence(myList, myList2))
+    val myTree = Branch(Branch(Leaf(2), Leaf(3)), Branch(Branch(Leaf(2), Leaf(3)), Leaf(4)))
+    println(myTree)
+    println(BinaryTreeStructure.size(myTree))
   }
 }

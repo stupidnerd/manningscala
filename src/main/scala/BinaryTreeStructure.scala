@@ -25,4 +25,9 @@ object BinaryTreeStructure {
     case Leaf(x) => Leaf(f(x))
     case Branch(l, r) => Branch(map(l)(f), map(r)(f))
   }
+
+  def fold[A, B](tree: Tree[A], z: B)(f: (A, B) => B): B = tree match {
+    case Leaf(x) => f(x, z)
+    case Branch(l, r) => fold(l, fold(r, z)(f))(f)
+  }
 }

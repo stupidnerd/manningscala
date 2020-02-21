@@ -13,5 +13,6 @@ object Main {
     println(BinaryTreeStructure.maximum(myTree))
     println(BinaryTreeStructure.depth(myTree))
     println(BinaryTreeStructure.map(myTree)(_ * 2))
+    println(BinaryTreeStructure.fold(myTree, 0)(_ + _))
   }
 }

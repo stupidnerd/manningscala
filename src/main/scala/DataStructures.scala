@@ -72,18 +72,20 @@ object DataStructures {
     def take[A](lst: List[A], n: Int): List[A] = {
       if (n < 0) Nil
       else if (n == 0) lst
+      else {
 
-      @tailrec
-      def loop(lst: List[A], n: Int, acc: List[A]): List[A] = {
-        if (n == 0) acc
-        else
-          lst match {
-            case Nil => acc
-            case Cons(x, xs) => loop(xs, n - 1, Cons(x, acc))
-          }
+        @tailrec
+        def loop(lst: List[A], n: Int, acc: List[A]): List[A] = {
+          if (n == 0) acc
+          else
+            lst match {
+              case Nil => acc
+              case Cons(x, xs) => loop(xs, n - 1, Cons(x, acc))
+            }
+        }
+
+        List.reverse(loop(lst, n, Nil))
       }
-
-      loop(lst, n, Nil)
     }
 
 
@@ -195,7 +197,28 @@ object DataStructures {
     }
 
     def hasSubsequence[A](sup: List[A], sub: List[A]): Boolean = {
-      throw new NotImplementedError()
+      def checkSub(lst: List[A]): Boolean = {
+        if (lst == sub)
+          true
+        else false
+      }
+
+      if (checkSub(take(sup, length(sub))))
+        true
+      else {
+        @tailrec
+        def loop(sup: List[A], acc: Boolean): Boolean = {
+          if (acc)
+            acc
+          else
+            sup match {
+              case Nil => acc
+              case Cons(x, xs) => loop(xs, checkSub(take(xs, length(sub))))
+            }
+        }
+
+        loop(sup, acc = false)
+      }
     }
   }
 
